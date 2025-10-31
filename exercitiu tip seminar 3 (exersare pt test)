@@ -51,7 +51,7 @@ public:
 
 		burger.afisareProdusAlimentar();
 		float* cantitati = new float[3] {100, 200, 300};
-		ProdusAlimentar* paste = new ProdusAlimentar(100, 3, cantitati, "paste");
+		ProdusAlimentar* paste = new ProdusAlimentar(300, 3, cantitati, "paste");
 
 		paste->afisareProdusAlimentar();
 
