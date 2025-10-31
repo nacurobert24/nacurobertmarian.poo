@@ -1,0 +1,60 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class ProdusAlimentar {
+private:
+	float pret;
+	const int id;
+	int nrIngrediente;
+	float* cantitati;
+	string denumire;
+	static int nrProduseAlimentare;
+public:
+	ProdusAlimentar() :id(++nrProduseAlimentare) {
+		this->pret = 0;
+		this->nrIngrediente = 0;
+		this->cantitati = nullptr;
+		this->denumire = "Produs default";
+	}
+	ProdusAlimentar(float pret, int nrIngrediente, float* cantitatiIngrediente, string denumire) :id(++nrProduseAlimentare) {
+		this->pret = pret;
+		this->nrIngrediente = nrIngrediente;
+		this->cantitati = new float[this->nrIngrediente];
+		this->denumire = denumire;
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			this->cantitati[i] = cantitatiIngrediente[i];
+		}
+		delete[] cantitatiIngrediente;
+	}
+	void afisareProdusAlimentar() {
+		cout << id << ". Produsul alimentar " << this->denumire << " se gaseste la pretul de " << this->pret << " lei si contine un numar de " << this->nrIngrediente << " ingrediente. " << endl;
+		if (this->cantitati != nullptr) {
+			for (int i = 0; i < nrIngrediente - 1; i++) {
+				cout << this->cantitati[i] << " grame, " << endl;
+			}
+			cout << this->cantitati[this->nrIngrediente - 1] << " grame. " << endl;
+		}
+	}
+	~ProdusAlimentar() {
+		if (this->cantitati != nullptr) {
+			delete[] this->cantitati;
+		}
+	}
+};
+	int ProdusAlimentar::nrProduseAlimentare = 0;
+
+	void main() {
+		ProdusAlimentar burger;
+
+		burger.afisareProdusAlimentar();
+		float* cantitati = new float[3] {100, 200, 300};
+		ProdusAlimentar* paste = new ProdusAlimentar(100, 3, cantitati, "paste");
+
+		paste->afisareProdusAlimentar();
+
+		delete paste;
+
+	}
