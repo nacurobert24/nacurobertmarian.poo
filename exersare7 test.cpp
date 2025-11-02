@@ -1,0 +1,63 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+
+class Masina {
+private:
+	const int id;
+	string marca;
+	string model;
+	int nrRevizii;
+	float* costRevizii;
+	static int nrMasini;
+public:
+	Masina() :id(++nrMasini) {
+		this->marca = "Necunoscut";
+		this->model = "Anonim";
+		this->nrRevizii = 0;
+		this->costRevizii = nullptr;
+	}
+	Masina(string marca, string model, int nrRevizii, float* costReviziiMasina) :id(++nrMasini) {
+		this->marca = marca;
+		this->model = model;
+		this->nrRevizii = nrRevizii;
+		this->costRevizii = new float[this->nrRevizii];
+		for (int i = 0; i < this->nrRevizii; i++) {
+			this->costRevizii[i] = costReviziiMasina[i];
+		}
+		delete[] costReviziiMasina;
+	}
+	void afisareMasina() {
+		cout << id << ". Masina " << this->marca << " , modelul " << this->model << " are un numar de " << this->nrRevizii << " revizii: " << endl;
+		if (this->costRevizii != nullptr) {
+			for (int i = 0; i < nrRevizii - 1; i++) {
+				cout << this->costRevizii[i] << " , ";
+			}
+			cout << this->costRevizii[this->nrRevizii - 1] << " . ";
+		}
+		else {
+			cout << "Masina nu are revizia facuta! " << endl;
+		}
+	}
+	~Masina() {
+		if (this->costRevizii != nullptr) {
+			delete[] this->costRevizii;
+		}
+	}
+};
+
+int Masina::nrMasini = 0;
+
+void main() {
+	Masina Dacia;
+
+	Dacia.afisareMasina();
+	float* costRevizii = new float[4] {1, 2, 3, 4};
+	Masina* KIA = new Masina("KIA", "CEED", 4, costRevizii);
+
+	KIA->afisareMasina();
+
+	delete KIA;
+}
