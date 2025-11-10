@@ -1,0 +1,130 @@
+/*#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+enum Tip {DOMESTIC=5, SALBATIC=7, PRIETENOS=9};
+
+class Animal {
+private:
+	const int id;
+	string specie;
+	string nume;
+	Tip tip;
+	int nrHranaZilnica;
+	float* cantitatiHrana;
+	static int nrAnimale;
+public:
+	Animal() :id(++nrAnimale) {
+		this->specie = "Necunoscut";
+		this->nume = "Anonim";
+		this->tip = SALBATIC;
+		this->nrHranaZilnica = 0;
+		this->cantitatiHrana = nullptr;
+	}
+	Animal(string specie, string nume, Tip tip, int nrHranaZilnica, float* cantitatiHranaZilnica) :id(++nrAnimale) {
+		this->specie = specie;
+		this->nume = nume;
+		this->tip = tip;
+		this->nrHranaZilnica = nrHranaZilnica;
+		this->cantitatiHrana = new float[this->nrHranaZilnica];
+		for (int i = 0; i < this->nrHranaZilnica; i++) {
+			this->cantitatiHrana[i] = cantitatiHranaZilnica[i];
+		}
+		delete[] cantitatiHranaZilnica;
+	}
+
+	//constructor de copiere
+
+	Animal(const Animal& copie) :id(++nrAnimale) {
+		this->specie = copie.specie;
+		this->nume = copie.nume;
+		this->tip = copie.tip;
+		this->nrHranaZilnica = copie.nrHranaZilnica;
+		if (copie.cantitatiHrana != nullptr) {
+			this->cantitatiHrana = new float[copie.nrHranaZilnica];
+			for (int i = 0; i < copie.nrHranaZilnica; i++) {
+				this->cantitatiHrana[i] = copie.cantitatiHrana[i];
+			}
+			}
+		else {
+			this->cantitatiHrana = nullptr;
+		}
+		}
+
+	//operator=
+
+	void operator=(const Animal& copie) {
+		this->specie = copie.specie;
+		this->nume = copie.nume;
+		this->tip = copie.tip;
+		this->nrHranaZilnica = copie.nrHranaZilnica;
+		if (this->cantitatiHrana != nullptr) {
+			delete[] this->cantitatiHrana;
+			this->cantitatiHrana = nullptr;
+		}
+		if (copie.cantitatiHrana != nullptr) {
+			this->cantitatiHrana = new float[copie.nrHranaZilnica];
+			for (int i = 0; i < copie.nrHranaZilnica; i++) {
+				this->cantitatiHrana[i] = copie.cantitatiHrana[i];
+			}
+		}
+		else {
+			this->cantitatiHrana = nullptr;
+		}
+	}
+
+	void afisareAnimal() {
+		cout << id << ". Animalul " << this->nume << " , de specie " << this->specie << " , tipul ";
+		if (this->tip == DOMESTIC) cout << "DOMESTIC";
+		if (this->tip == SALBATIC) cout << "SALBATIC";
+		if (this->tip == PRIETENOS) cout << "PRIETENOS";
+		cout << " primeste " << this->nrHranaZilnica << " cantitati de mancare pe zi: " << endl;
+		if (this->cantitatiHrana != nullptr) {
+			for (int i = 0; i < this->nrHranaZilnica - 1; i++) {
+				cout << this->cantitatiHrana[i] << " grame, ";
+			}
+			cout << this->cantitatiHrana[this->nrHranaZilnica - 1] << " grame. ";
+		}
+	}
+	~Animal() {
+		if (this->cantitatiHrana != nullptr) {
+			delete[] this->cantitatiHrana;
+		}
+	}
+	void operator+= valoareDeAdunat{
+		this->nrHranaZilnica += valoareDeAdunat;
+	}
+	
+};
+
+int Animal::nrAnimale = 0;
+
+void main() {
+	Animal urs;
+
+	urs.afisareAnimal();
+	float* cantitatiHrana = new float[3] {200, 300, 400};
+	Animal* vulpe = new Animal("Mamifer omnivor", "vulpe", SALBATIC, 3, cantitatiHrana);
+
+	vulpe->afisareAnimal();
+
+	Animal animal(*vulpe);
+	animal.afisareAnimal();
+
+	urs = *vulpe;
+	urs.afisareAnimal();
+
+	urs += 7;
+	urs.afisareAnimal();
+
+	if (animal > vulpe) {
+		cout << "Animalul urs este mai mare decat vulpe";
+	}
+	else {
+		cout << "Animalul urs este mai mic decat vulpe";
+	}
+
+	delete vulpe;
+}
+*/
