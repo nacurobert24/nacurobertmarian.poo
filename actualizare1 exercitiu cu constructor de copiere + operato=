@@ -1,0 +1,133 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <cstring>
+
+using namespace std;
+enum Tip {BIO=7, DE_BAZA=6, NORMAL=9};
+
+class ProdusAlimentar {
+private:
+	const int id;
+	float pret;
+	string denumire;
+	Tip tip;
+	int nrIngrediente;
+	float* cantitati;
+	static int nrProduseAlimentare;
+public:
+	ProdusAlimentar() :id(++nrProduseAlimentare) {
+		this->pret = 0;
+		this->denumire = "Produs default";
+		this->tip = BIO;
+		this->nrIngrediente = 0;
+		this->cantitati = nullptr;
+	}
+	ProdusAlimentar(float pret, string denumire, Tip tip, int nrIngrediente, float* cantitatiIngrediente) :id(++nrProduseAlimentare) {
+		this->pret = pret;
+		this->denumire = denumire;
+		this->tip = tip;
+		this->nrIngrediente = nrIngrediente;
+		this->cantitati = new float[this->nrIngrediente];
+		for (int i = 0; i < this->nrIngrediente; i++) {
+			this->cantitati[i] = cantitatiIngrediente[i];
+		}
+		delete[] cantitatiIngrediente;
+	}
+	~ProdusAlimentar() {
+		if (this->cantitati != nullptr) {
+			delete[] this->cantitati;
+		}
+	}
+
+	void operator+= pretDeAdunat{
+this->pret += pretDeAdunat;
+	}
+		bool operato > (const ProdusAlimentar& pa) {
+		return this->pret > pa.pret;
+	}
+
+	//constructor de copiere
+
+	ProdusAlimentar(const ProdusAlimentar& copie) :id(++nrProduseAlimentare) {
+		this->pret = copie.pret;
+		this->denumire = copie.denumire;
+		this->tip = copie.tip;
+		this->nrIngrediente = copie.nrIngrediente;
+		if (this->cantitati != nullptr) {
+			this->cantitati = new float[copie.nrIngrediente];
+			for (int i = 0; i < copie.nrIngrediente; i++) {
+				this->cantitati[i] = copie.cantitati[i];
+			}
+		}
+		else {
+			this->cantitati = nullptr;
+		}
+	}
+
+	//operator=
+
+	void operator=(const ProdusAlimentar& copie) {
+		this->pret = copie.pret;
+		this->denumire = copie.denumire;
+		this->tip = copie.tip;
+		this->nrIngrediente = copie.nrIngrediente;
+	
+			if (this->cantitati != nullptr) {
+				delete[] this->cantitati;
+				this->cantitati = nullptr;
+			}
+			if (this->cantitati != nullptr) {
+				this->cantitati = new float[copie.nrIngrediente];
+				for (int i = 0; i < copie.nrIngrediente; i++) {
+					this->cantitati[i] = copie.cantitati[i];
+				}
+			}
+			else {
+				this->cantitati = nullptr;
+			}
+	}
+
+	void afisareProdusAlimentar() {
+		cout << id << ". Produsul alimentar" << this->denumire << ", de tipul ";
+		if (this->tip == BIO) cout << "BIO";
+		if (this->tip == DE_BAZA) cout << "DE BAZA";
+		if (this->tip == NORMAL) cout << "NORMAL";
+		cout << ", care se afla la pretul de " << this->pret << " lei are un numar de cantitati de " << this->nrIngrediente << " ingrediente " << endl;
+		if (this->cantitati != nullptr) {
+			for (int i = 0; i < this->nrIngrediente - 1; i++) {
+				cout << this -> cantitati[i] << " grame, ";
+			}
+			cout << this->cantitati[this->nrIngrediente - 1] << " grame. ";
+		}
+	}
+};
+
+int ProdusAlimentar::nrProduseAlimentare = 0;
+
+void main() {
+	ProdusAlimentar pizza;
+
+	pizza.afisareProdusAlimentar();
+	float* cantitati = new float[3] {100, 200, 300};
+	ProdusAlimentar* sushi = new ProdusAlimentar(350, "sushi", BIO, 3, cantitati);
+
+	sushi->afisareProdusAlimentar();
+
+	ProdusAlimentar produs;
+	produs.afisareProdusAlimentar();
+
+	pizza = *sushi;
+	pizza.afisareProdusAlimentar();
+
+	pizza += 7;
+	pizza.afisareProdusAlimentar();
+
+	if (produs > pizza) {
+		cout << endl << " Produsul sushi are pretul mai mare!";
+	}
+	else {
+		cout << endl << " Produsul pizza are pretul mai mare!";
+	}
+
+	delete sushi;
+}
