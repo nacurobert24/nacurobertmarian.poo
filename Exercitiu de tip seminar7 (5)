@@ -1,0 +1,187 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+enum Specie { CAINE = 1, PISICA = 2, PASARE = 3 };
+
+class Animal {
+private:
+    const int id;
+    string nume;
+    float varsta;
+    Specie specie;
+    int nrLuni;
+    float* greutati;
+    static int nrAnimale;
+
+public:
+    Animal() : id(++nrAnimale) {
+        nume = "Necunoscut";
+        varsta = 0;
+        specie = CAINE;
+        nrLuni = 0;
+        greutati = nullptr;
+    }
+
+    Animal(string nume, float varsta, Specie specie, int nrLuni, float* lista)
+        : id(++nrAnimale)
+    {
+        this->nume = nume;
+        this->varsta = varsta;
+        this->specie = specie;
+        this->nrLuni = nrLuni;
+
+        greutati = new float[nrLuni];
+        for (int i = 0; i < nrLuni; i++)
+            greutati[i] = lista[i];
+
+        delete[] lista;
+    }
+
+    Animal(const Animal& a) : id(++nrAnimale) {
+        nume = a.nume;
+        varsta = a.varsta;
+        specie = a.specie;
+        nrLuni = a.nrLuni;
+
+        if (a.greutati) {
+            greutati = new float[a.nrLuni];
+            for (int i = 0; i < a.nrLuni; i++)
+                greutati[i] = a.greutati[i];
+        } else greutati = nullptr;
+    }
+
+    void operator=(const Animal& a) {
+        nume = a.nume;
+        varsta = a.varsta;
+        specie = a.specie;
+
+        if (greutati) delete[] greutati;
+
+        nrLuni = a.nrLuni;
+
+        if (a.greutati) {
+            greutati = new float[a.nrLuni];
+            for (int i = 0; i < a.nrLuni; i++)
+                greutati[i] = a.greutati[i];
+        } else greutati = nullptr;
+    }
+
+    void afisare() {
+        cout << endl << "Animal #" << id;
+        cout << " | Nume: " << nume;
+        cout << " | Varsta: " << varsta;
+        cout << " | Specie: ";
+        if (specie == CAINE) cout << "CAINE";
+        if (specie == PISICA) cout << "PISICA";
+        if (specie == PASARE) cout << "PASARE";
+
+        cout << " | Greutati: [ ";
+        for (int i = 0; i < nrLuni; i++)
+            cout << greutati[i] << " ";
+        cout << "]";
+    }
+
+    void operator+=(float x) { varsta += x; }
+
+    bool operator>(const Animal& a) { return varsta > a.varsta; }
+
+    bool operator!() { return varsta > 0; }
+
+    float operator()(float ani) { return varsta + ani; }
+
+    float& operator[](int index) {
+        if (index < 0 || index >= nrLuni)
+            throw exception();
+        return greutati[index];
+    }
+
+    Animal operator++(int) {
+        Animal copie = *this;
+        varsta++;
+        return copie;
+    }
+
+    Animal operator++() {
+        varsta++;
+        return *this;
+    }
+
+    explicit operator int() { return nrLuni; }
+
+    friend ostream& operator<<(ostream& out, Animal a) {
+        out << endl << "Animal #" << a.id;
+        out << "\nNume: " << a.nume;
+        out << "\nVarsta: " << a.varsta;
+        out << "\nSpecie: ";
+        if (a.specie == CAINE) out << "CAINE";
+        if (a.specie == PISICA) out << "PISICA";
+        if (a.specie == PASARE) out << "PASARE";
+
+        out << "\nGreutati: ";
+        for (int i = 0; i < a.nrLuni; i++)
+            out << a.greutati[i] << " ";
+        return out;
+    }
+
+    friend istream& operator>>(istream& in, Animal& a) {
+        cout << "\nNume: ";
+        in >> a.nume;
+
+        cout << "Varsta: ";
+        in >> a.varsta;
+
+        int s;
+        cout << "Specie (1=Caine, 2=Pisica, 3=Pasare): ";
+        in >> s;
+
+        if (s == 1) a.specie = CAINE;
+        if (s == 2) a.specie = PISICA;
+        if (s == 3) a.specie = PASARE;
+
+        cout << "Nr luni: ";
+        in >> a.nrLuni;
+
+        if (a.greutati) delete[] a.greutati;
+
+        a.greutati = new float[a.nrLuni];
+        for (int i = 0; i < a.nrLuni; i++) {
+            cout << "Greutate[" << i << "]: ";
+            in >> a.greutati[i];
+        }
+
+        return in;
+    }
+
+    ~Animal() {
+        if (greutati) delete[] greutati;
+    }
+};
+
+int Animal::nrAnimale = 0;
+
+int main() {
+    Animal a1;
+    a1.afisare();
+
+    float* greut = new float[3]{ 2.3f, 3.1f, 4.0f };
+    Animal* a2 = new Animal("Rex", 5.2f, CAINE, 3, greut);
+    a2->afisare();
+
+    cout << endl << (*a2)[0];
+    (*a2)[0] = 5.6f;
+    cout << endl << (*a2)[0];
+
+    cout << *a2;
+
+    Animal a3 = (*a2)++;
+    Animal a4 = ++(*a2);
+
+    cout << a3;
+    cout << a4;
+
+    cout << endl << (int)(*a2);
+
+    delete a2;
+    return 0;
+}
